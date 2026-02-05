@@ -1,0 +1,23 @@
+const CACHE_NAME = 'urhajo-v1';
+const assets = [
+  './index.html',
+  './manifest.json',
+  'https://www.soundjay.com/buttons/sounds/beep-07.mp3',
+  'https://www.soundjay.com/transportation/sounds/rocket-launch-01.mp3'
+];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(assets);
+    })
+  );
+});
+
+self.addEventListener('fetch', event => {
+  event.respondWith(
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request);
+    })
+  );
+});
